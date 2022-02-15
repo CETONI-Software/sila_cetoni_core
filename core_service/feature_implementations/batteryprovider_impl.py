@@ -40,7 +40,7 @@ class BatteryProviderImpl(BatteryProviderBase):
                 new_voltage = (
                     self.__channel.read_input() * VOLTAGE_DIVIDER_FACTOR if self.__system.state.is_operational() else 0
                 )
-                if not math.isclose(new_voltage, voltage):
+                if not math.isclose(new_voltage, voltage, abs_tol=1.0e-3):
                     voltage = new_voltage
                     self.update_BatteryVoltage(voltage)
                 time.sleep(0.1)
