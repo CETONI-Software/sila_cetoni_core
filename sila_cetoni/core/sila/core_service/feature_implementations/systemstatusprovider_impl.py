@@ -7,7 +7,8 @@ from typing import Any, Dict
 
 from sila2.framework import FullyQualifiedIdentifier
 
-from ....application.system import ApplicationSystem
+from sila_cetoni.application.system import ApplicationSystem
+
 from ..generated.systemstatusprovider import SystemStatusProviderBase
 
 

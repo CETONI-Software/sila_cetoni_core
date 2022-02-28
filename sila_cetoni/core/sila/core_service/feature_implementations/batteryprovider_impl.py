@@ -9,7 +9,8 @@ from typing import Any, Dict
 from qmixsdk.qmixanalogio import AnalogInChannel
 from sila2.framework import FullyQualifiedIdentifier
 
-from ....application.system import ApplicationSystem
+from sila_cetoni.application.system import ApplicationSystem
+
 from ..generated.batteryprovider import BatteryProviderBase
 
 
