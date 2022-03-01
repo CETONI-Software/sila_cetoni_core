@@ -11,6 +11,8 @@ from .feature_implementations.systemstatusprovider_impl import SystemStatusProvi
 from .generated.batteryprovider import BatteryProviderFeature
 from .generated.systemstatusprovider import SystemStatusProviderFeature
 
+logger = logging.getLogger(__name__)
+
 
 class Server(SilaServer):
     def __init__(
@@ -37,7 +39,7 @@ class Server(SilaServer):
         self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
         if not ApplicationSystem().device_config.has_battery:
-            logging.debug("This device does not have a battery")
+            logger.debug("This device does not have a battery")
             return
 
         self.batteryprovider = BatteryProviderImpl(self.child_task_executor)
