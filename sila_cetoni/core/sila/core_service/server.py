@@ -4,7 +4,8 @@ from uuid import UUID
 
 from sila2.server import SilaServer
 
-from ...application.system import ApplicationSystem
+from sila_cetoni.application.system import ApplicationSystem
+
 from .feature_implementations.batteryprovider_impl import BatteryProviderImpl
 from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
 from .generated.batteryprovider import BatteryProviderFeature
