@@ -7,5 +7,5 @@ Run `python -m sila_cetoni_core --help` to receive a full list of available opti
 
 ## Code generation
 ```console
-$ python -m sila2.code_generator new-package -n core_service -o ./sila_cetoni_core/sila/ ../../features/de/cetoni/core/*.sila.xml
+$ python -m sila2.code_generator new-package -n core_service -o ./sila_cetoni/core/sila/ ./sila_cetoni/core/features*.sila.xml
 ```
