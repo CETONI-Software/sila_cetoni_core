@@ -35,12 +35,12 @@ class Server(SilaServer):
             max_grpc_workers=1000,
         )
 
-        self.systemstatusprovider = SystemStatusProviderImpl(self.child_task_executor)
+        self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
         self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
         if not ApplicationSystem().device_config.has_battery:
             logger.debug("This device does not have a battery")
             return
 
-        self.batteryprovider = BatteryProviderImpl(self.child_task_executor)
+        self.batteryprovider = BatteryProviderImpl(self, self.child_task_executor)
         self.set_feature_implementation(BatteryProviderFeature, self.batteryprovider)
