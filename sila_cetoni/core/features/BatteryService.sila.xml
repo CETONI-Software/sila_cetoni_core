@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Feature SiLA2Version="1.0" FeatureVersion="1.0" Originator="de.cetoni" Category="core" xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_base/raw/master/schema/FeatureDefinition.xsd">
+    <Identifier>BatteryService</Identifier>
+    <DisplayName>Battery Service</DisplayName>
+    <Description>Provides information on the state of a battery and allows initiating a battery replacement routine</Description>
+
+    <!-- Commands -->
+    <Command>
+        <Identifier>PerformBatteryReplacement</Identifier>
+        <DisplayName>Perform Battery Replacement</DisplayName>
+        <Description>Performs the battery replacement routine, i.e. unlocks the battery block, waits until the old battery has been removed and the new one has been inserted and locks the battery block again.</Description>
+        <Observable>Yes</Observable>
+        <DefinedExecutionErrors>
+            <Identifier>UnlockingFailed</Identifier>
+            <Identifier>LockingFailed</Identifier>
+        </DefinedExecutionErrors>
+    </Command>
+
+    <!-- Properties -->
+    <Property>
+        <Identifier>BatteryVoltage</Identifier>
+        <DisplayName>Battery Voltage</DisplayName>
+        <Description>The current voltage of the battery</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <Constrained>
+                <DataType>
+                    <Basic>Real</Basic>
+                </DataType>
+                <Constraints>
+                    <Unit>
+                        <Label>V</Label>
+                        <Factor>1</Factor>
+                        <Offset>0</Offset>
+                        <UnitComponent>
+                            <SIUnit>Kilogram</SIUnit>
+                            <Exponent>1</Exponent>
+                        </UnitComponent>
+                        <UnitComponent>
+                            <SIUnit>Meter</SIUnit>
+                            <Exponent>2</Exponent>
+                        </UnitComponent>
+                        <UnitComponent>
+                            <SIUnit>Second</SIUnit>
+                            <Exponent>-3</Exponent>
+                        </UnitComponent>
+                        <UnitComponent>
+                            <SIUnit>Ampere</SIUnit>
+                            <Exponent>-1</Exponent>
+                        </UnitComponent>
+                    </Unit>
+                </Constraints>
+            </Constrained>
+        </DataType>
+    </Property>
+
+    <Property>
+        <Identifier>BatteryTemperature</Identifier>
+        <DisplayName>Battery Temperature</DisplayName>
+        <Description>The current temperature of the battery block</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <Constrained>
+                <DataType>
+                    <Basic>Integer</Basic>
+                </DataType>
+                <Constraints>
+                    <Unit>
+                        <Label>°C</Label>
+                        <Factor>1</Factor>
+                        <Offset>273.15</Offset>
+                        <UnitComponent>
+                            <SIUnit>Kelvin</SIUnit>
+                            <Exponent>1</Exponent>
+                        </UnitComponent>
+                    </Unit>
+                </Constraints>
+            </Constrained>
+        </DataType>
+    </Property>
+
+    <Property>
+        <Identifier>LockingPinState</Identifier>
+        <DisplayName>LockingPinState</DisplayName>
+        <Description>The state of the locking pin that holds the battery in its place</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <Basic>String</Basic>
+        </DataType>
+    </Property>
+
+    <!-- Errors -->
+    <DefinedExecutionError>
+        <Identifier>UnlockingFailed</Identifier>
+        <DisplayName>Unlocking Failed</DisplayName>
+        <Description>The battery block could not be unlocked. Check the state of the lifting magnet and manually resolve the issue. Then restart the battery replacement routine.</Description>
+    </DefinedExecutionError>
+    <DefinedExecutionError>
+        <Identifier>LockingFailed</Identifier>
+        <DisplayName>Locking Failed</DisplayName>
+        <Description>The battery block could not be locked. Check the state of the lifting magnet and manually resolve the issue. Then restart the device.</Description>
+    </DefinedExecutionError>
+</Feature>

@@ -3,4 +3,4 @@ from os.path import dirname, join
 
 from sila2.framework import Feature
 
-BatteryProviderFeature = Feature(join(dirname(__file__), "BatteryProvider.sila.xml"))
+BatteryServiceFeature = Feature(join(dirname(__file__), "BatteryService.sila.xml"))

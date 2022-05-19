@@ -6,7 +6,7 @@ from typing import Set
 from sila2.client import SilaClient
 from sila2.framework import FullyQualifiedFeatureIdentifier
 
-from .batteryprovider import BatteryProviderClient
+from .batteryservice import BatteryServiceClient, BatteryServiceFeature, LockingFailed, UnlockingFailed
 from .systemstatusprovider import SystemStatusProviderClient
 
 
@@ -14,13 +14,21 @@ class Client(SilaClient):
 
     SystemStatusProvider: SystemStatusProviderClient
 
-    BatteryProvider: BatteryProviderClient
+    BatteryService: BatteryServiceClient
 
     _expected_features: Set[FullyQualifiedFeatureIdentifier] = {
         FullyQualifiedFeatureIdentifier("org.silastandard/core/SiLAService/v1"),
         FullyQualifiedFeatureIdentifier("de.cetoni/core/SystemStatusProvider/v1"),
-        FullyQualifiedFeatureIdentifier("de.cetoni/core/BatteryProvider/v1"),
+        FullyQualifiedFeatureIdentifier("de.cetoni/core/BatteryService/v1"),
     }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._register_defined_execution_error_class(
+            BatteryServiceFeature.defined_execution_errors["UnlockingFailed"], UnlockingFailed
+        )
+
+        self._register_defined_execution_error_class(
+            BatteryServiceFeature.defined_execution_errors["LockingFailed"], LockingFailed
+        )
