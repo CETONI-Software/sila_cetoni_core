@@ -6,9 +6,9 @@ from sila2.server import SilaServer
 
 from sila_cetoni.application.system import ApplicationSystem
 
-from .feature_implementations.batteryprovider_impl import BatteryProviderImpl
+from .feature_implementations.batteryservice_impl import BatteryServiceImpl
 from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
-from .generated.batteryprovider import BatteryProviderFeature
+from .generated.batteryservice import BatteryServiceFeature
 from .generated.systemstatusprovider import SystemStatusProviderFeature
 
 logger = logging.getLogger(__name__)
@@ -42,5 +42,5 @@ class Server(SilaServer):
             logger.debug("This device does not have a battery")
             return
 
-        self.batteryprovider = BatteryProviderImpl(self, self.child_task_executor)
-        self.set_feature_implementation(BatteryProviderFeature, self.batteryprovider)
+        self.batteryprovider = BatteryServiceImpl(self, self.child_task_executor)
+        self.set_feature_implementation(BatteryServiceFeature, self.batteryprovider)
