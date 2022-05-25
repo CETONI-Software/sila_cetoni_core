@@ -62,7 +62,7 @@
         <DataType>
             <Constrained>
                 <DataType>
-                    <Basic>Integer</Basic>
+                    <Basic>Real</Basic>
                 </DataType>
                 <Constraints>
                     <Unit>

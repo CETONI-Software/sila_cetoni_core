@@ -26,7 +26,7 @@ class BatteryServiceClient:
     The current voltage of the battery
     """
 
-    BatteryTemperature: ClientObservableProperty[int]
+    BatteryTemperature: ClientObservableProperty[float]
     """
     The current temperature of the battery block
     """

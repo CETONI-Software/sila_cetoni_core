@@ -43,7 +43,7 @@ message Subscribe_BatteryTemperature_Parameters {
 
 /* Responses of BatteryTemperature */
 message Subscribe_BatteryTemperature_Responses {
-  sila2.org.silastandard.Integer BatteryTemperature = 1;  /* The current temperature of the battery block */
+  sila2.org.silastandard.Real BatteryTemperature = 1;  /* The current temperature of the battery block */
 }
 
 /* Parameters for LockingPinState */

@@ -17,7 +17,7 @@ class BatteryServiceBase(FeatureImplementationBase, ABC):
 
     _BatteryVoltage_producer_queue: Queue[float]
 
-    _BatteryTemperature_producer_queue: Queue[int]
+    _BatteryTemperature_producer_queue: Queue[float]
 
     _LockingPinState_producer_queue: Queue[str]
 
@@ -55,7 +55,7 @@ class BatteryServiceBase(FeatureImplementationBase, ABC):
         """
         pass
 
-    def update_BatteryTemperature(self, BatteryTemperature: int, queue: Optional[Queue[int]] = None):
+    def update_BatteryTemperature(self, BatteryTemperature: float, queue: Optional[Queue[float]] = None):
         """
         The current temperature of the battery block
 
@@ -65,7 +65,7 @@ class BatteryServiceBase(FeatureImplementationBase, ABC):
             queue = self._BatteryTemperature_producer_queue
         queue.put(BatteryTemperature)
 
-    def BatteryTemperature_on_subscription(self, *, metadata: MetadataDict) -> Optional[Queue[int]]:
+    def BatteryTemperature_on_subscription(self, *, metadata: MetadataDict) -> Optional[Queue[float]]:
         """
         The current temperature of the battery block
 
