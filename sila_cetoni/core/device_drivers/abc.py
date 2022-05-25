@@ -46,6 +46,13 @@ class BatteryInterface(ABC):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def stop(self):
+        """
+        Can be used to stop polling for battery value changes if active polling is used by the specific driver
+        implementation
+        """
+        raise NotImplementedError()
 
 class BatteryReplacementFailed(Exception):
     """

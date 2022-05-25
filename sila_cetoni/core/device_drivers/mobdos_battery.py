@@ -137,7 +137,7 @@ class MobDosBattery(BatteryInterface):
         self.__ipc_polling_thread = Thread(target=poll, name="ipc_polling_thread", args=(self.__stop_event,))
         self.__ipc_polling_thread.start()
 
-    def __del__(self):
+    def stop(self):
         self.__stop_event.set()
         self.__ipc_polling_thread.join()
 
