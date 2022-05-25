@@ -34,10 +34,32 @@ class BatteryServiceImpl(BatteryServiceBase):
                     self.update_BatteryVoltage(voltage)
                 time.sleep(0.1)
 
-        # initial value
+        def update_temperature(stop_event: Event):
+            new_temperature = temperature = self.__battery.temperature if self.__system.state.is_operational() else 0
+            while not stop_event.is_set():
+                new_temperature = self.__battery.temperature if self.__system.state.is_operational() else 0
+                if not math.isclose(new_temperature, temperature, abs_tol=1.0e-3):
+                    temperature = new_temperature
+                    self.update_BatteryTemperature(temperature)
+                time.sleep(0.1)
+
+        def update_locking_pin_state(stop_event: Event):
+            new_state = state = self.__battery.locking_pin_state if self.__system.state.is_operational() else ""
+            while not stop_event.is_set():
+                new_state = self.__battery.locking_pin_state if self.__system.state.is_operational() else ""
+                if new_state != state:
+                    state = new_state
+                    self.update_LockingPinState(state)
+                time.sleep(0.1)
+
+        # initial values
         self.update_BatteryVoltage(self.__battery.voltage)
+        self.update_BatteryTemperature(self.__battery.temperature)
+        self.update_LockingPinState(self.__battery.locking_pin_state)
 
         executor.submit(update_voltage, self.__stop_event)
+        executor.submit(update_temperature, self.__stop_event)
+        executor.submit(update_locking_pin_state, self.__stop_event)
 
     def PerformBatteryReplacement(
         self, *, metadata: MetadataDict, instance: ObservableCommandInstance
