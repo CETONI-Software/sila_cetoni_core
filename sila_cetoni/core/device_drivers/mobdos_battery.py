@@ -41,17 +41,17 @@ def _ipc(message: Union[str, bytes]) -> Generator[str, None, None]:
         try:
             reader, writer = await asyncio.open_connection("127.0.0.1", 8888)
 
-            logger.info(f"Send: {message!r}")
+            logger.debug(f"Send: {message!r}")
             writer.write(message if isinstance(message, bytes) else message.encode())
 
             while True:
                 data = await reader.read(100)
                 if data == b"":
                     break
-                logger.info(f"Received: {data.decode()!r}")
+                logger.debug(f"Received: {data.decode()!r}")
                 yield data.decode()
 
-            logger.info("Closing connection")
+            logger.debug("Closing connection")
             writer.close()
         except (ConnectionRefusedError, ConnectionResetError) as err:
             logger.error(err)
