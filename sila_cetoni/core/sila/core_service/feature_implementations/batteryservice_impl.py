@@ -49,9 +49,9 @@ class BatteryServiceImpl(BatteryServiceBase):
                 time.sleep(0.1)
 
         def update_locking_pin_state(stop_event: Event):
-            new_state = state = self.__battery.locking_pin_state if self.__system.state.is_operational() else ""
+            new_state = state = self.__battery.locking_pin_state
             while not stop_event.is_set():
-                new_state = self.__battery.locking_pin_state if self.__system.state.is_operational() else ""
+                new_state = self.__battery.locking_pin_state
                 if new_state != state:
                     state = new_state
                     self.update_LockingPinState(state)
