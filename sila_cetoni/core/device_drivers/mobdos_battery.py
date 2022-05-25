@@ -38,20 +38,23 @@ def _ipc(message: Union[str, bytes]) -> Generator[str, None, None]:
 
             :returns: A generator with the received messages
         """
-        reader, writer = await asyncio.open_connection("127.0.0.1", 8888)
+        try:
+            reader, writer = await asyncio.open_connection("127.0.0.1", 8888)
 
-        logger.info(f"Send: {message!r}")
-        writer.write(message if isinstance(message, bytes) else message.encode())
+            logger.info(f"Send: {message!r}")
+            writer.write(message if isinstance(message, bytes) else message.encode())
 
-        while True:
-            data = await reader.read(100)
-            if data == b"":
-                break
-            logger.info(f"Received: {data.decode()!r}")
-            yield data.decode()
+            while True:
+                data = await reader.read(100)
+                if data == b"":
+                    break
+                logger.info(f"Received: {data.decode()!r}")
+                yield data.decode()
 
-        logger.info("Closing connection")
-        writer.close()
+            logger.info("Closing connection")
+            writer.close()
+        except (ConnectionRefusedError, ConnectionResetError) as err:
+            logger.error(err)
 
     def sync_generator(async_gen: AsyncGenerator[Any, None]) -> Generator[Any, None, None]:
         """
@@ -130,9 +133,16 @@ class MobDosBattery(BatteryInterface):
 
         def poll(stop_event: Event):
             while not stop_event.is_set():
-                time.sleep(self.__POLLING_TIMEOUT)
-                self._voltage = float(next(_ipc("BAT_VOLTAGE")))
-                self._temperature = float(next(_ipc("BAT_TEMP")))
+                try:
+                    time.sleep(self.__POLLING_TIMEOUT)
+                    self._voltage = float(next(_ipc("BAT_VOLTAGE")))
+                    logger.info(f"voltage {self._voltage}")
+                    self._temperature = float(next(_ipc("BAT_TEMP")))
+                    logger.info(f"temp {self._temperature}")
+                    self._locking_pin_state = next(_ipc("LP_POS"))
+                    logger.info(f"pin state {self._locking_pin_state}")
+                except StopIteration:
+                    pass
 
         self.__ipc_polling_thread = Thread(target=poll, name="ipc_polling_thread", args=(self.__stop_event,))
         self.__ipc_polling_thread.start()
