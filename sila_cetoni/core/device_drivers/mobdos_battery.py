@@ -135,13 +135,18 @@ class MobDosBattery(BatteryInterface):
             while not stop_event.is_set():
                 try:
                     time.sleep(self.__POLLING_TIMEOUT)
+                    self._is_connected = bool(next(_ipc("BAT_CONN")))
+                    logger.debug(f"bat connected {self._is_connected}")
+                    self._is_secondary_source_connected = bool(next(_ipc("EXT_CONN")))
+                    logger.debug(f"ext connected {self._is_secondary_source_connected}")
                     self._voltage = float(next(_ipc("BAT_VOLTAGE")))
-                    logger.info(f"voltage {self._voltage}")
+                    logger.debug(f"voltage {self._voltage}")
                     self._temperature = float(next(_ipc("BAT_TEMP")))
-                    logger.info(f"temp {self._temperature}")
+                    logger.debug(f"temp {self._temperature}")
                     self._locking_pin_state = next(_ipc("LP_POS"))
-                    logger.info(f"pin state {self._locking_pin_state}")
+                    logger.debug(f"pin state {self._locking_pin_state}")
                 except StopIteration:
+                    logger.info(f"stop iteration, {stop_event.is_set()}")
                     pass
 
         self.__ipc_polling_thread = Thread(target=poll, name="ipc_polling_thread", args=(self.__stop_event,))

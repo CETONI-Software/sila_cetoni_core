@@ -19,12 +19,25 @@ class BatteryInterface(ABC):
     Interface for a battery device driver
     """
 
-    _voltage: float
-    _temperature: float
-    _locking_pin_state: str
+    _is_connected: bool= False
+    _is_secondary_source_connected: bool= False
+    _voltage: float= 0
+    _temperature: float= 0
+    _locking_pin_state: str= ""
 
     def __init__(self):
         super().__init__()
+
+    @property
+    def is_connected(self) -> bool:
+        return self._is_connected
+
+    @property
+    def is_secondary_source_connected(self) -> bool:
+        """
+        Whether there is another power source that can be used to cover the time where the battery is not connected
+        """
+        return self._is_secondary_source_connected
 
     @property
     def voltage(self) -> float:
