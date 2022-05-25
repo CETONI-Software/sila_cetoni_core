@@ -135,9 +135,9 @@ class MobDosBattery(BatteryInterface):
             while not stop_event.is_set():
                 try:
                     time.sleep(self.__POLLING_TIMEOUT)
-                    self._is_connected = bool(next(_ipc("BAT_CONN")))
+                    self._is_connected = eval(next(_ipc("BAT_CONN")))
                     logger.debug(f"bat connected {self._is_connected}")
-                    self._is_secondary_source_connected = bool(next(_ipc("EXT_CONN")))
+                    self._is_secondary_source_connected = eval(next(_ipc("EXT_CONN")))
                     logger.debug(f"ext connected {self._is_secondary_source_connected}")
                     self._voltage = float(next(_ipc("BAT_VOLTAGE")))
                     logger.debug(f"voltage {self._voltage}")
