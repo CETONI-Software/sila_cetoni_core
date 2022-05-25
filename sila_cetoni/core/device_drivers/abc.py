@@ -8,8 +8,8 @@ An interface for implementing a battery device driver for the CETONI SiLA SDK
 from __future__ import annotations
 
 import logging
-
 from abc import ABC, abstractmethod
+from typing import Any, Generator, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +39,15 @@ class BatteryInterface(ABC):
         return self._locking_pin_state
 
     @abstractmethod
-    def replace_battery(self):
+    def replace_battery(self) -> Optional[Generator[Tuple[int, str, bool], None, None]]:
         """
         Perform a battery replacement routine (e.g. perform steps so that the user can safely remove the battery and
         insert a new battery)
+
+            :return: A generator with status information of the replacement routine (if available)
+                     The generators yielded values are tuples with 3 elements where the first corresponds to the overall
+                     progress (0 - 100), the seconds corresponds to a status message (`str`) and the third indicates whether
+                     there was en error or not (`bool`)
         """
         raise NotImplementedError()
 
@@ -53,6 +58,7 @@ class BatteryInterface(ABC):
         implementation
         """
         raise NotImplementedError()
+
 
 class BatteryReplacementFailed(Exception):
     """

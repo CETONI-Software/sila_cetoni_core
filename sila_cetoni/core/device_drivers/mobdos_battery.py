@@ -6,19 +6,19 @@ A device driver implementation for the CETONI mobile dosage unit
 """
 
 import asyncio
-from queue import Queue
-import time
-from typing import Any, AsyncGenerator, Coroutine, Generator, Union
-from .abc import BatteryInterface, BatteryReplacementFailed
-
 import logging
+import time
+from queue import Queue
+from typing import Any, AsyncGenerator, Coroutine, Generator, Tuple, Union
+
+from .abc import BatteryInterface, BatteryReplacementFailed
 
 try:
     import coloredlogs
 except (ModuleNotFoundError, ImportError):
     pass
 
-from threading import Thread, Event
+from threading import Event, Thread
 
 logger = logging.getLogger(__name__)
 
@@ -147,13 +147,17 @@ class MobDosBattery(BatteryInterface):
         self.__ipc_polling_thread = Thread(target=poll, name="ipc_polling_thread", args=(self.__stop_event,))
         self.__ipc_polling_thread.start()
 
+    def replace_battery(self) -> Generator[Tuple[int, str, bool], None, None]:
+        for message in _ipc("REPLACE_BAT"):
+            progress, status = message.split(":")
+            if progress == "Error":
+                yield (100, status, True)
+            else:
+                yield (progress, status, False)
+
     def stop(self):
         self.__stop_event.set()
         self.__ipc_polling_thread.join()
-
-    def replace_battery(self):
-        for res in _ipc("REPLACE_BAT"):
-            logger.info(res)
 
 
 if __name__ == "__main__":
@@ -165,4 +169,6 @@ if __name__ == "__main__":
         logging.basicConfig(format=LOGGING_FORMAT, level=logging_level)
 
     battery_driver = MobDosBattery()
-    battery_driver.replace_battery()
+    for _ in battery_driver.replace_battery():
+        pass
+    battery_driver.stop()
