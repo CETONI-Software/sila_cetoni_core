@@ -12,6 +12,8 @@ service BatteryService {
   rpc PerformBatteryReplacement_Info (sila2.org.silastandard.CommandExecutionUUID) returns (stream sila2.org.silastandard.ExecutionInfo) {}
   /* Retrieve result of PerformBatteryReplacement */
   rpc PerformBatteryReplacement_Result(sila2.org.silastandard.CommandExecutionUUID) returns (sila2.de.cetoni.core.batteryservice.v1.PerformBatteryReplacement_Responses) {}
+  /* Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct. */
+  rpc Subscribe_IsConnected (sila2.de.cetoni.core.batteryservice.v1.Subscribe_IsConnected_Parameters) returns (stream sila2.de.cetoni.core.batteryservice.v1.Subscribe_IsConnected_Responses) {}
   /* The current voltage of the battery */
   rpc Subscribe_BatteryVoltage (sila2.de.cetoni.core.batteryservice.v1.Subscribe_BatteryVoltage_Parameters) returns (stream sila2.de.cetoni.core.batteryservice.v1.Subscribe_BatteryVoltage_Responses) {}
   /* The current temperature of the battery block */
@@ -26,6 +28,15 @@ message PerformBatteryReplacement_Parameters {
 
 /* Responses of PerformBatteryReplacement */
 message PerformBatteryReplacement_Responses {
+}
+
+/* Parameters for IsConnected */
+message Subscribe_IsConnected_Parameters {
+}
+
+/* Responses of IsConnected */
+message Subscribe_IsConnected_Responses {
+  sila2.org.silastandard.Boolean IsConnected = 1;  /* Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct. */
 }
 
 /* Parameters for BatteryVoltage */

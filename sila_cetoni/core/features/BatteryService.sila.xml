@@ -18,6 +18,16 @@
 
     <!-- Properties -->
     <Property>
+        <Identifier>IsConnected</Identifier>
+        <DisplayName>Is Connected</DisplayName>
+        <Description>Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct.</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <Basic>Boolean</Basic>
+        </DataType>
+    </Property>
+
+    <Property>
         <Identifier>BatteryVoltage</Identifier>
         <DisplayName>Battery Voltage</DisplayName>
         <Description>The current voltage of the battery</Description>

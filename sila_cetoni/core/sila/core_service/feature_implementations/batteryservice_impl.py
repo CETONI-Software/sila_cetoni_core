@@ -30,6 +30,15 @@ class BatteryServiceImpl(BatteryServiceBase):
         self.__system = ApplicationSystem()
         self.__stop_event = Event()
 
+        def update_is_connected(stop_event: Event):
+            new_is_connected = is_connected = self.__battery.is_connected
+            while not stop_event.is_set():
+                new_is_connected = self.__battery.is_connected
+                if new_is_connected != is_connected:
+                    is_connected = new_is_connected
+                    self.update_IsConnected(is_connected)
+                time.sleep(0.1)
+
         def update_voltage(stop_event: Event):
             new_voltage = voltage = self.__battery.voltage if self.__system.state.is_operational() else 0
             while not stop_event.is_set():
@@ -58,10 +67,12 @@ class BatteryServiceImpl(BatteryServiceBase):
                 time.sleep(0.1)
 
         # initial values
+        self.update_IsConnected(self.__battery.is_connected)
         self.update_BatteryVoltage(self.__battery.voltage)
         self.update_BatteryTemperature(self.__battery.temperature)
         self.update_LockingPinState(self.__battery.locking_pin_state)
 
+        executor.submit(update_is_connected, self.__stop_event)
         executor.submit(update_voltage, self.__stop_event)
         executor.submit(update_temperature, self.__stop_event)
         executor.submit(update_locking_pin_state, self.__stop_event)

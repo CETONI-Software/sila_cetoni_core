@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
 class BatteryServiceBase(FeatureImplementationBase, ABC):
 
+    _IsConnected_producer_queue: Queue[bool]
+
     _BatteryVoltage_producer_queue: Queue[float]
 
     _BatteryTemperature_producer_queue: Queue[float]
@@ -27,11 +29,35 @@ class BatteryServiceBase(FeatureImplementationBase, ABC):
         """
         super().__init__(parent_server=parent_server)
 
+        self._IsConnected_producer_queue = Queue()
+
         self._BatteryVoltage_producer_queue = Queue()
 
         self._BatteryTemperature_producer_queue = Queue()
 
         self._LockingPinState_producer_queue = Queue()
+
+    def update_IsConnected(self, IsConnected: bool, queue: Optional[Queue[bool]] = None):
+        """
+        Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct.
+
+        This method updates the observable property 'IsConnected'.
+        """
+        if queue is None:
+            queue = self._IsConnected_producer_queue
+        queue.put(IsConnected)
+
+    def IsConnected_on_subscription(self, *, metadata: MetadataDict) -> Optional[Queue[bool]]:
+        """
+        Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct.
+
+        This method is called when a client subscribes to the observable property 'IsConnected'
+
+        :param metadata: The SiLA Client Metadata attached to the call
+        :return: Optional `Queue` that should be used for updating this property.
+            If None, the default Queue will be used.
+        """
+        pass
 
     def update_BatteryVoltage(self, BatteryVoltage: float, queue: Optional[Queue[float]] = None):
         """

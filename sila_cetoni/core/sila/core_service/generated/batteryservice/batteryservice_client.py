@@ -21,6 +21,11 @@ class BatteryServiceClient:
     Provides information on the state of a battery and allows initiating a battery replacement routine
     """
 
+    IsConnected: ClientObservableProperty[bool]
+    """
+    Whether the battery is currently connected. If it is not connected the voltage and temperature values are probably not correct.
+    """
+
     BatteryVoltage: ClientObservableProperty[float]
     """
     The current voltage of the battery
