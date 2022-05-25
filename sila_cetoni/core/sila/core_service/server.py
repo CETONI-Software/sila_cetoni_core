@@ -4,8 +4,7 @@ from uuid import UUID
 
 from sila2.server import SilaServer
 
-from sila_cetoni.application.system import ApplicationSystem
-
+from ...device_drivers.abc import BatteryInterface
 from .feature_implementations.batteryservice_impl import BatteryServiceImpl
 from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
 from .generated.batteryservice import BatteryServiceFeature
@@ -17,6 +16,7 @@ logger = logging.getLogger(__name__)
 class Server(SilaServer):
     def __init__(
         self,
+        battery: Optional[BatteryInterface] = None,
         server_name: str = "",
         server_type: str = "",
         server_description: str = "",
@@ -38,9 +38,9 @@ class Server(SilaServer):
         self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
         self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
-        if not ApplicationSystem().device_config.has_battery:
+        if battery is None:
             logger.debug("This device does not have a battery")
             return
 
-        self.batteryprovider = BatteryServiceImpl(self, self.child_task_executor)
+        self.batteryprovider = BatteryServiceImpl(self, battery, self.child_task_executor)
         self.set_feature_implementation(BatteryServiceFeature, self.batteryprovider)
