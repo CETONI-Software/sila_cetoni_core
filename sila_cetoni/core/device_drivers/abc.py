@@ -21,6 +21,7 @@ class BatteryInterface(ABC):
 
     _voltage: float
     _temperature: float
+    _locking_pin_state: str
 
     def __init__(self):
         super().__init__()
@@ -32,6 +33,10 @@ class BatteryInterface(ABC):
     @property
     def temperature(self) -> float:
         return self._temperature
+
+    @property
+    def locking_pin_state(self) -> str:
+        return self._locking_pin_state
 
     @abstractmethod
     def replace_battery(self):
