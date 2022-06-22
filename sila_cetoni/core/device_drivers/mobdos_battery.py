@@ -124,7 +124,7 @@ class MobDosBattery(BatteryInterface):
     __stop_event: Event
     __ipc_polling_thread: Thread
 
-    __POLLING_TIMEOUT: int = 2  #: seconds
+    __POLLING_TIMEOUT: float = 0.5  #: seconds
 
     def __init__(self):
         super().__init__()
@@ -134,7 +134,7 @@ class MobDosBattery(BatteryInterface):
         def poll(stop_event: Event):
             while not stop_event.is_set():
                 try:
-                    time.sleep(self.__POLLING_TIMEOUT)
+                    # time.sleep(self.__POLLING_TIMEOUT)
                     self._is_connected = eval(next(_ipc("BAT_CONN")))
                     logger.debug(f"bat connected {self._is_connected}")
                     self._is_secondary_source_connected = eval(next(_ipc("EXT_CONN")))
