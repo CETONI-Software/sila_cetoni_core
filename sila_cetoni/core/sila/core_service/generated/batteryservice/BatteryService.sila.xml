@@ -85,7 +85,7 @@
   </Property>
   <Property>
     <Identifier>LockingPinState</Identifier>
-    <DisplayName>LockingPinState</DisplayName>
+    <DisplayName>Locking Pin State</DisplayName>
     <Description>The state of the locking pin that holds the battery in its place</Description>
     <Observable>Yes</Observable>
     <DataType>
