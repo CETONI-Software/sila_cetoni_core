@@ -45,7 +45,7 @@ def _ipc(message: Union[str, bytes]) -> Generator[str, None, None]:
             writer.write(message if isinstance(message, bytes) else message.encode())
 
             while True:
-                data = await reader.read(100)
+                data = await reader.read(256)
                 if data == b"":
                     break
                 logger.debug(f"Received: {data.decode()!r}")
@@ -154,7 +154,7 @@ class MobDosBattery(BatteryInterface):
 
     def replace_battery(self) -> Generator[Tuple[int, str, bool], None, None]:
         for message in _ipc("REPLACE_BAT"):
-            progress, status = message.split(":")
+            progress, status = message.split(":", 1)
             if progress == "Error":
                 yield (100, status, True)
             else:
