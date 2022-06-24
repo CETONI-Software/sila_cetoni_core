@@ -158,7 +158,7 @@ class MobDosBattery(BatteryInterface):
             if progress == "Error":
                 yield (100, status, True)
             else:
-                yield (progress, status, False)
+                yield (int(progress), status, False)
 
     def stop(self):
         self.__stop_event.set()
