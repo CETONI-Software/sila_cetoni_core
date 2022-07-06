@@ -13,6 +13,9 @@ from .generated.systemstatusprovider import SystemStatusProviderFeature
 logger = logging.getLogger(__name__)
 
 
+__version__ = "1.0.0"
+
+
 class Server(SilaServer):
     def __init__(
         self,
@@ -28,7 +31,7 @@ class Server(SilaServer):
             server_name=server_name or "Core Service",
             server_type=server_type or "TestServer",
             server_description=server_description or "Provides status information about the overall system",
-            server_version=server_version or "0.1.0",
+            server_version=server_version or __version__,
             server_vendor_url=server_vendor_url or "https://www.cetoni.com",
             server_uuid=server_uuid,
             max_child_task_workers=1000,
