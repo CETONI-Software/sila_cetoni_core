@@ -18,10 +18,15 @@ Types of changes
 
 ## Unreleased
 
+## v1.2.0
+
+Sync with sila_cetoni v1.2.0
+
 
 ## v1.1.0
 
 ### Changed
+
 - Bump sila2 to v0.8.2
 
 ## v1.0.0
@@ -31,6 +36,7 @@ First release of sila_cetoni
 This is the core plugin which contains core SiLA 2 features that are used by multiple devices
 
 ### Added
+
 - SystemStatusProvider feature and feature implementation
 - ShutdownController feature
 - BatteryService feature and feature implementation
