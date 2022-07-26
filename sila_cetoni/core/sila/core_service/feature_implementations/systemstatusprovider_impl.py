@@ -38,4 +38,5 @@ class SystemStatusProviderImpl(SystemStatusProviderBase):
         executor.submit(update_state, self.__stop_event)
 
     def stop(self) -> None:
+        super().stop()
         self.__stop_event.set()

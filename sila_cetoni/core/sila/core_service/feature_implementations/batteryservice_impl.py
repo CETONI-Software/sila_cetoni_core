@@ -91,4 +91,5 @@ class BatteryServiceImpl(BatteryServiceBase):
                 )
 
     def stop(self) -> None:
+        super().stop()
         self.__stop_event.set()
