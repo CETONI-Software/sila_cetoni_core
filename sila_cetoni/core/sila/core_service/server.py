@@ -13,7 +13,7 @@ from .generated.systemstatusprovider import SystemStatusProviderFeature
 logger = logging.getLogger(__name__)
 
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 class Server(SilaServer):
