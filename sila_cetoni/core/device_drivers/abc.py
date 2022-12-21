@@ -1,8 +1,8 @@
 """
 An interface for implementing a battery device driver for the CETONI SiLA SDK
 
-:author: Florian Meinicke (florian.meinicke@cetoni.de)
-:date: 18.05.2022
+Author: Florian Meinicke (florian.meinicke@cetoni.de)
+Creation Date: 18.05.2022
 """
 
 from __future__ import annotations
@@ -57,10 +57,13 @@ class BatteryInterface(ABC):
         Perform a battery replacement routine (e.g. perform steps so that the user can safely remove the battery and
         insert a new battery)
 
-            :return: A generator with status information of the replacement routine (if available)
-                     The generators yielded values are tuples with 3 elements where the first corresponds to the overall
-                     progress (0 - 100), the seconds corresponds to a status message (`str`) and the third indicates whether
-                     there was en error or not (`bool`)
+        Returns
+        -------
+        Generator[Tuple[int, str, bool], None, None] or None
+            A generator with status information of the replacement routine (if available, else `None` is returned)
+            The generators yielded values are tuples with 3 elements where the first corresponds to the overall
+            progress (0 - 100), the seconds corresponds to a status message (`str`) and the third indicates whether
+            there was en error or not (`bool`)
         """
         raise NotImplementedError()
 

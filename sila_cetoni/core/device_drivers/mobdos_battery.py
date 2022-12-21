@@ -1,8 +1,8 @@
 """
 A device driver implementation for the CETONI mobile dosage unit
 
-:author: Florian Meinicke (florian.meinicke@cetoni.de)
-:date: 18.05.2022
+Author: Florian Meinicke (florian.meinicke@cetoni.de)
+Creation Date: 18.05.2022
 """
 
 import asyncio
@@ -27,9 +27,15 @@ def _ipc(message: Union[str, bytes]) -> Generator[str, None, None]:
     """
     Handles the IPC to the firmware of the mob dos
 
-        :param message: The message to send to the firmware
+    Paramters
+    ---------
+    message: Union[str, bytes]
+        The message to send to the firmware
 
-        :return: A generator with the received message(s) from the firmware
+    Returns
+    -------
+    Generator[str, None, None]
+        A generator with the received message(s) from the firmware
     """
 
     async def async_ipc() -> AsyncGenerator[str, None]:
@@ -63,16 +69,25 @@ def _ipc(message: Union[str, bytes]) -> Generator[str, None, None]:
         Adapted from https://stackoverflow.com/a/63595496 and https://stackoverflow.com/a/41901796 (for the part with
         the additional thread that executes the async event loop in case this function is called from a non-main thread)
 
-            :param async_gen: The async generator to convert
+        Paramters
+        ---------
+        async_gen: AsyncGenerator[Any, None]
+            The async generator to convert
         """
 
         def iter_over_async(async_gen: AsyncGenerator[Any, None]) -> Generator[Any, None, None]:
             """
             Iterates over the async generator `async_gen` and yields the values in a synchronous manner
 
-                :param async_gen: The async generator to iterate over
+            Paramters
+            ---------
+            async_gen: AsyncGenerator[Any, None]
+                The async generator to iterate over
 
-                :return: A synchronous generator with the values from the `async_gen`
+            Returns
+            -------
+            Generator[Any, None, None]
+                A synchronous generator with the values from the `async_gen`
             """
 
             ait = async_gen.__aiter__()
@@ -134,7 +149,7 @@ class MobDosBattery(BatteryInterface):
         def poll(stop_event: Event):
             while not stop_event.is_set():
                 try:
-                    # time.sleep(self.__POLLING_TIMEOUT)
+                    time.sleep(self.__POLLING_TIMEOUT)
                     self._is_connected = eval(next(_ipc("BAT_CONN")))
                     logger.debug(f"bat connected {self._is_connected}")
                     self._is_secondary_source_connected = eval(next(_ipc("EXT_CONN")))
@@ -154,6 +169,7 @@ class MobDosBattery(BatteryInterface):
 
     def replace_battery(self) -> Generator[Tuple[int, str, bool], None, None]:
         for message in _ipc("REPLACE_BAT"):
+            logger.info(f"message {message}")
             progress, status = message.split(":", 1)
             if progress == "Error":
                 yield (100, status, True)
