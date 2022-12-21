@@ -85,7 +85,6 @@ class BatteryServiceImpl(BatteryServiceBase):
     def PerformBatteryReplacement(
         self, *, metadata: MetadataDict, instance: ObservableCommandInstance
     ) -> PerformBatteryReplacement_Responses:
-        instance.status = CommandExecutionStatus.running
         for (progress, status, error) in self.__battery.replace_battery():
             logger.info(f"{progress}: {status} ({error})")
             instance.progress = min(max(0, progress / 100), 1)
