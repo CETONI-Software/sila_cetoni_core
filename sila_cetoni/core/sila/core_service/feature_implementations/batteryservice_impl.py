@@ -14,7 +14,12 @@ from sila2.server import MetadataDict, ObservableCommandInstance, SilaServer
 from sila_cetoni.application.system import ApplicationSystem
 
 from ....device_drivers import BatteryInterface
-from ..generated.batteryservice import BatteryServiceBase, PerformBatteryReplacement_Responses
+from ..generated.batteryservice import (
+    BatteryServiceBase,
+    PerformBatteryReplacement_Responses,
+    LockingFailed,
+    UnlockingFailed,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +90,12 @@ class BatteryServiceImpl(BatteryServiceBase):
             logger.info(f"{progress}: {status} ({error})")
             instance.progress = min(max(0, progress / 100), 1)
             if error:
-                raise RuntimeError(status)
+                if "Locking failed" in status:
+                    raise LockingFailed()
+                elif "Unlocking failed" in status:
+                    raise UnlockingFailed()
+                else:
+                    raise RuntimeError(status)
 
     def stop(self) -> None:
         super().stop()
