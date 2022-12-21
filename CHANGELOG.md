@@ -18,6 +18,10 @@ Types of changes
 
 ## Unreleased
 
+### Removed
+
+- BatteryService moved to the new sila_cetoni_mobdos package
+
 ## v1.8.0
 
 Sync with sila_cetoni v1.8.0 release
