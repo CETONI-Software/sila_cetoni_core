@@ -1,0 +1,30 @@
+<Feature xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Category="core" FeatureVersion="1.0" Originator="de.cetoni" SiLA2Version="1.0" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_base/raw/master/schema/FeatureDefinition.xsd">
+  <Identifier>ShutdownController</Identifier>
+  <DisplayName>Shutdown Controller</DisplayName>
+  <Description>Provides a generic way of telling a SiLA2 server that it is about to be shut down or to shut down itself. The server implements a routine to be executed before the hardware is shut down (e.g. saving device parameters or bringing the device into a safe position) and may also be capable of shutting itself down completely.</Description>
+  <!-- Commands -->
+  <Command>
+    <Identifier>PrepareShutdown</Identifier>
+    <DisplayName>Prepare Shutdown</DisplayName>
+    <Description>Initiates the pre-shutdown routine. If no errors occurred during this process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off). Shutting down the server must be done manually, e.g. by unplugging the power to the device.</Description>
+    <Observable>Yes</Observable>
+    <DefinedExecutionErrors>
+      <Identifier>PrepareShutdownFailed</Identifier>
+    </DefinedExecutionErrors>
+  </Command>
+  <Command>
+    <Identifier>Shutdown</Identifier>
+    <DisplayName>Shutdown</DisplayName>
+    <Description>Initiates the shutdown routine. This first executes the pre-shutdown routine (to store parameters, bring the device in a safe position, etc.) and then physically shuts down the device. If errors occurred during the pre-shutdown process the server is considered not ready to be physically shutdown (i.e. the device will not be shut down/powered off).</Description>
+    <Observable>Yes</Observable>
+    <DefinedExecutionErrors>
+      <Identifier>PrepareShutdownFailed</Identifier>
+    </DefinedExecutionErrors>
+  </Command>
+  <!-- Errors -->
+  <DefinedExecutionError>
+    <Identifier>PrepareShutdownFailed</Identifier>
+    <DisplayName>Prepare Shutdown Failed</DisplayName>
+    <Description>The pre-shutdown routine was not executed properly. The server is not ready to be physically shutdown.</Description>
+  </DefinedExecutionError>
+</Feature>
