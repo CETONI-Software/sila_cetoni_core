@@ -4,16 +4,15 @@ from __future__ import annotations
 import time
 from concurrent.futures import Executor
 from threading import Event
-from typing import Any, Dict
 
-from sila2.framework import FullyQualifiedIdentifier
 from sila2.server import SilaServer
 
-from sila_cetoni.application.system import ApplicationSystem
+from sila_cetoni.application.system import ApplicationSystem, CetoniApplicationSystem
 
 from ..generated.systemstatusprovider import SystemStatusProviderBase
 
 
+@CetoniApplicationSystem.monitor_traffic
 class SystemStatusProviderImpl(SystemStatusProviderBase):
     __system: ApplicationSystem
     __stop_event: Event

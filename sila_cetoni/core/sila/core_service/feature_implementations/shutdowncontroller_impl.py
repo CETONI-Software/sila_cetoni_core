@@ -4,13 +4,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from sila2.server import MetadataDict, ObservableCommandInstance
-from sila_cetoni.application.system import ApplicationSystem
+
+from sila_cetoni.application.system import ApplicationSystem, CetoniApplicationSystem
+
 from ..generated.shutdowncontroller import PrepareShutdown_Responses, Shutdown_Responses, ShutdownControllerBase
 
 if TYPE_CHECKING:
     from ..server import Server
 
 
+@CetoniApplicationSystem.monitor_traffic
 class ShutdownControllerImpl(ShutdownControllerBase):
     def __init__(self, parent_server: Server) -> None:
         super().__init__(parent_server=parent_server)
