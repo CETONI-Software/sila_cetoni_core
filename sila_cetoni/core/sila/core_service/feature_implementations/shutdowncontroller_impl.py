@@ -26,5 +26,4 @@ class ShutdownControllerImpl(ShutdownControllerBase):
 
     def Shutdown(self, *, metadata: MetadataDict, instance: ObservableCommandInstance) -> Shutdown_Responses:
         instance.begin_execution()  # set execution status from `waiting` to `running`
-        self.PrepareShutdown()
         ApplicationSystem().shutdown()
