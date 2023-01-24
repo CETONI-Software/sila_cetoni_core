@@ -39,5 +39,5 @@ class Server(SilaServer):
         self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
         self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
-        self.shutdowncontroller = ShutdownControllerImpl(self)
+        self.shutdowncontroller = ShutdownControllerImpl(self, self.child_task_executor)
         self.set_feature_implementation(ShutdownControllerFeature, self.shutdowncontroller)

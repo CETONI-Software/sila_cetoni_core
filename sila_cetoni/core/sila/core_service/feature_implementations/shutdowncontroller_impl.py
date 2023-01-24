@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from concurrent.futures import Executor
 
 from sila2.server import MetadataDict, ObservableCommandInstance
 
@@ -15,8 +16,13 @@ if TYPE_CHECKING:
 
 @CetoniApplicationSystem.monitor_traffic
 class ShutdownControllerImpl(ShutdownControllerBase):
-    def __init__(self, parent_server: Server) -> None:
+
+    __executor: Executor
+
+    def __init__(self, parent_server: Server, executor: Executor) -> None:
         super().__init__(parent_server=parent_server)
+
+        self.__executor = executor
 
     def PrepareShutdown(
         self, *, metadata: MetadataDict, instance: ObservableCommandInstance
@@ -26,4 +32,6 @@ class ShutdownControllerImpl(ShutdownControllerBase):
 
     def Shutdown(self, *, metadata: MetadataDict, instance: ObservableCommandInstance) -> Shutdown_Responses:
         instance.begin_execution()  # set execution status from `waiting` to `running`
-        ApplicationSystem().shutdown()
+        # use the `Executor` so that this Command can be finished successfully (calling `shutdown` directly would abort
+        # the underlying RPC immediately)
+        self.__executor.submit(ApplicationSystem().shutdown)
