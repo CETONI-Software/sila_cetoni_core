@@ -18,6 +18,12 @@ Types of changes
 
 ## Unreleased
 
+### Changed
+
+- ShutdownController gained the Command PrepareShutdown that is semantically equal to the formerly known Shutdown Command
+- The Shutdown Command will now result in a physical shutdown of the device/OS
+- ShutdownController and SystemStatusProvider are now monitored for traffic by `CetoniApplicationSystem`
+
 ### Removed
 
 - BatteryService moved to the new sila_cetoni_mobdos package
