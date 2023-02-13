@@ -7,8 +7,11 @@ if TYPE_CHECKING:
     from sila_cetoni.application.application_configuration import ApplicationConfiguration
 
 from sila_cetoni.application.device import Device
+from sila_cetoni.utils import get_version
 
 from .sila.core_service.server import Server
+
+__version__ = get_version(__name__)
 
 logger = logging.getLogger(__name__)
 

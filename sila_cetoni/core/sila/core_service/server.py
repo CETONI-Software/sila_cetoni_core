@@ -12,9 +12,6 @@ from .generated.systemstatusprovider import SystemStatusProviderFeature
 logger = logging.getLogger(__name__)
 
 
-__version__ = "1.8.0"
-
-
 class Server(SilaServer):
     def __init__(
         self,
@@ -25,6 +22,8 @@ class Server(SilaServer):
         server_vendor_url: str = "",
         server_uuid: Optional[Union[str, UUID]] = None,
     ):
+        from ... import __version__
+
         super().__init__(
             server_name=server_name or "Core Service",
             server_type=server_type or "TestServer",
