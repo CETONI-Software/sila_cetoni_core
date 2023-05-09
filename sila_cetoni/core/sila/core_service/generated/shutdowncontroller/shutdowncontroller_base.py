@@ -17,9 +17,7 @@ class ShutdownControllerBase(FeatureImplementationBase, ABC):
 
     def __init__(self, parent_server: Server):
         """
-
         Provides a generic way of telling a SiLA2 server that it is about to be shut down or to shut down itself. The server implements a routine to be executed before the hardware is shut down (e.g. saving device parameters or bringing the device into a safe position) and may also be capable of shutting itself down completely.
-
         """
         super().__init__(parent_server=parent_server)
 
@@ -28,9 +26,7 @@ class ShutdownControllerBase(FeatureImplementationBase, ABC):
         self, *, metadata: MetadataDict, instance: ObservableCommandInstance
     ) -> PrepareShutdown_Responses:
         """
-
-            Initiates the pre-shutdown routine. If no errors occurred during this process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off). Shutting down the server must be done manually, e.g. by unplugging the power to the device.
-
+        Initiates the pre-shutdown routine. If no errors occurred during this process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off). Shutting down the server must be done manually, e.g. by unplugging the power to the device.
 
 
         :param metadata: The SiLA Client Metadata attached to the call
@@ -42,9 +38,7 @@ class ShutdownControllerBase(FeatureImplementationBase, ABC):
     @abstractmethod
     def Shutdown(self, *, metadata: MetadataDict, instance: ObservableCommandInstance) -> Shutdown_Responses:
         """
-
-            Initiates the shutdown routine. This first executes the pre-shutdown routine (to store parameters, bring the device in a safe position, etc.) and then physically shuts down the device. If errors occurred during the pre-shutdown process the server is considered not ready to be physically shutdown (i.e. the device will not be shut down/powered off).
-
+        Initiates the shutdown routine. This first executes the pre-shutdown routine (to store parameters, bring the device in a safe position, etc.) and then physically shuts down the device. If errors occurred during the pre-shutdown process the server is considered not ready to be physically shutdown (i.e. the device will not be shut down/powered off).
 
 
         :param metadata: The SiLA Client Metadata attached to the call

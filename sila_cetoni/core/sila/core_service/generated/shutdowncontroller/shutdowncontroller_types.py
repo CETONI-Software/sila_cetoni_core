@@ -5,10 +5,8 @@ from typing import NamedTuple
 
 
 class PrepareShutdown_Responses(NamedTuple):
-
     pass
 
 
 class Shutdown_Responses(NamedTuple):
-
     pass
