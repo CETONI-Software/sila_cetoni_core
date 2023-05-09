@@ -4,8 +4,10 @@ from uuid import UUID
 
 from sila2.server import SilaServer
 
+from .feature_implementations.errorprovider_impl import ErrorProviderImpl
 from .feature_implementations.shutdowncontroller_impl import ShutdownControllerImpl
 from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
+from .generated.errorprovider import ErrorProviderFeature
 from .generated.shutdowncontroller import ShutdownControllerFeature
 from .generated.systemstatusprovider import SystemStatusProviderFeature
 
@@ -40,3 +42,6 @@ class Server(SilaServer):
 
         self.shutdowncontroller = ShutdownControllerImpl(self, self.child_task_executor)
         self.set_feature_implementation(ShutdownControllerFeature, self.shutdowncontroller)
+
+        self.errorprovider = ErrorProviderImpl(self)
+        self.set_feature_implementation(ErrorProviderFeature, self.errorprovider)

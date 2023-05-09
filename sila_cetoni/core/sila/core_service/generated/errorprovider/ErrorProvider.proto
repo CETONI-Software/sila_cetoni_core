@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "SiLAFramework.proto";
+
+package sila2.de.cetoni.core.errorprovider.v1;
+
+/* This feature provides global error functionality that a client can subscribe to to get notified about any errors of the server without having to execute a Command, read a Property or (re-)start a Property subscription. */
+service ErrorProvider {
+  /* Clears all errors */
+  rpc ClearAllErrors (sila2.de.cetoni.core.errorprovider.v1.ClearAllErrors_Parameters) returns (sila2.de.cetoni.core.errorprovider.v1.ClearAllErrors_Responses) {}
+  /* The list of errors that occurred during the lifetime of this server or since the last time ClearAllErrors was called. */
+  rpc Subscribe_Errors (sila2.de.cetoni.core.errorprovider.v1.Subscribe_Errors_Parameters) returns (stream sila2.de.cetoni.core.errorprovider.v1.Subscribe_Errors_Responses) {}
+  /* The most recent error that occurred. */
+  rpc Subscribe_LastError (sila2.de.cetoni.core.errorprovider.v1.Subscribe_LastError_Parameters) returns (stream sila2.de.cetoni.core.errorprovider.v1.Subscribe_LastError_Responses) {}
+}
+
+/* The severity level of an error. */
+message DataType_SeverityLevel {
+  message SeverityLevel_Struct {
+    sila2.org.silastandard.Integer Code = 1;  /* The numerical code of the severity level. */
+    sila2.org.silastandard.String Name = 2;  /* The human readable name of the severity level. */
+  }
+  sila2.de.cetoni.core.errorprovider.v1.DataType_SeverityLevel.SeverityLevel_Struct SeverityLevel = 1;  /* The severity level of an error. */
+}
+
+/* An error entry. */
+message DataType_Error {
+  message Error_Struct {
+    sila2.org.silastandard.Timestamp Timestamp = 1;  /* The timestamp at which this error occurred. */
+    sila2.de.cetoni.core.errorprovider.v1.DataType_SeverityLevel Level = 2;  /* The severity level of this error. */
+    sila2.org.silastandard.String Description = 3;  /* The human readable error description. */
+  }
+  sila2.de.cetoni.core.errorprovider.v1.DataType_Error.Error_Struct Error = 1;  /* An error entry. */
+}
+
+/* Parameters for ClearAllErrors */
+message ClearAllErrors_Parameters {
+}
+
+/* Responses of ClearAllErrors */
+message ClearAllErrors_Responses {
+}
+
+/* Parameters for Errors */
+message Subscribe_Errors_Parameters {
+}
+
+/* Responses of Errors */
+message Subscribe_Errors_Responses {
+  repeated sila2.de.cetoni.core.errorprovider.v1.DataType_Error Errors = 1;  /* The list of errors that occurred during the lifetime of this server or since the last time ClearAllErrors was called. */
+}
+
+/* Parameters for LastError */
+message Subscribe_LastError_Parameters {
+}
+
+/* Responses of LastError */
+message Subscribe_LastError_Responses {
+  sila2.de.cetoni.core.errorprovider.v1.DataType_Error LastError = 1;  /* The most recent error that occurred. */
+}

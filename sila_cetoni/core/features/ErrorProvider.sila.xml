@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Feature SiLA2Version="1.0" FeatureVersion="1.0" Originator="de.cetoni" Category="core" xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_base/raw/master/schema/FeatureDefinition.xsd">
+    <Identifier>ErrorProvider</Identifier>
+    <DisplayName>Error Provider</DisplayName>
+    <Description>This feature provides global error functionality that a client can subscribe to to get notified about any errors of the server without having to execute a Command, read a Property or (re-)start a Property subscription.</Description>
+
+    <!-- Commands -->
+    <Command>
+        <Identifier>ClearAllErrors</Identifier>
+        <DisplayName>Clear All Errors</DisplayName>
+        <Description>Clears all errors</Description>
+        <Observable>No</Observable>
+    </Command>
+
+    <!-- Properties -->
+    <Property>
+        <Identifier>Errors</Identifier>
+        <DisplayName>Errors</DisplayName>
+        <Description>The list of errors that occurred during the lifetime of this server or since the last time ClearAllErrors was called.</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <List>
+                <DataType>
+                    <DataTypeIdentifier>Error</DataTypeIdentifier>
+                </DataType>
+            </List>
+        </DataType>
+    </Property>
+    <Property>
+        <Identifier>LastError</Identifier>
+        <DisplayName>Last Error</DisplayName>
+        <Description>The most recent error that occurred.</Description>
+        <Observable>Yes</Observable>
+        <DataType>
+            <DataTypeIdentifier>Error</DataTypeIdentifier>
+        </DataType>
+    </Property>
+
+    <!-- Data Type Definitions -->
+    <DataTypeDefinition>
+        <Identifier>SeverityLevel</Identifier>
+        <DisplayName>SeverityLevel</DisplayName>
+        <Description>The severity level of an error.</Description>
+        <DataType>
+            <Structure>
+                <Element>
+                    <Identifier>Code</Identifier>
+                    <DisplayName>Code</DisplayName>
+                    <Description>The numerical code of the severity level.</Description>
+                    <DataType>
+                        <Constrained>
+                            <DataType>
+                                <Basic>Integer</Basic>
+                            </DataType>
+                            <Constraints>
+                                <Set>
+                                    <Value>0</Value>
+                                    <Value>1</Value>
+                                    <Value>2</Value>
+                                    <Value>3</Value>
+                                </Set>
+                            </Constraints>
+                        </Constrained>
+                    </DataType>
+                </Element>
+                <Element>
+                    <Identifier>Name</Identifier>
+                    <DisplayName>Name</DisplayName>
+                    <Description>The human readable name of the severity level.</Description>
+                    <DataType>
+                        <Constrained>
+                            <DataType>
+                                <Basic>String</Basic>
+                            </DataType>
+                            <Constraints>
+                                <Set>
+                                    <Value>Info</Value>
+                                    <Value>Warning</Value>
+                                    <Value>Critical</Value>
+                                    <Value>Fatal</Value>
+                                </Set>
+                            </Constraints>
+                        </Constrained>
+                    </DataType>
+                </Element>
+            </Structure>
+        </DataType>
+    </DataTypeDefinition>
+
+    <DataTypeDefinition>
+        <Identifier>Error</Identifier>
+        <DisplayName>Error</DisplayName>
+        <Description>An error entry.</Description>
+        <DataType>
+            <Structure>
+                <Element>
+                    <Identifier>Timestamp</Identifier>
+                    <DisplayName>Timestamp</DisplayName>
+                    <Description>The timestamp at which this error occurred.</Description>
+                    <DataType>
+                        <Basic>Timestamp</Basic>
+                    </DataType>
+                </Element>
+                <Element>
+                    <Identifier>Level</Identifier>
+                    <DisplayName>Level</DisplayName>
+                    <Description>The severity level of this error.</Description>
+                    <DataType>
+                        <DataTypeIdentifier>SeverityLevel</DataTypeIdentifier>
+                    </DataType>
+                </Element>
+                <Element>
+                    <Identifier>Description</Identifier>
+                    <DisplayName>Description</DisplayName>
+                    <Description>The human readable error description.</Description>
+                    <DataType>
+                        <Basic>String</Basic>
+                    </DataType>
+                </Element>
+            </Structure>
+        </DataType>
+    </DataTypeDefinition>
+
+</Feature>

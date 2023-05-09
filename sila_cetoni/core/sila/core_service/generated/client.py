@@ -6,20 +6,23 @@ from typing import Set
 from sila2.client import SilaClient
 from sila2.framework import FullyQualifiedFeatureIdentifier
 
+from .errorprovider import ErrorProviderClient
 from .shutdowncontroller import PrepareShutdownFailed, ShutdownControllerClient, ShutdownControllerFeature
 from .systemstatusprovider import SystemStatusProviderClient
 
 
 class Client(SilaClient):
-
-    SystemStatusProvider: SystemStatusProviderClient
+    ErrorProvider: ErrorProviderClient
 
     ShutdownController: ShutdownControllerClient
 
+    SystemStatusProvider: SystemStatusProviderClient
+
     _expected_features: Set[FullyQualifiedFeatureIdentifier] = {
         FullyQualifiedFeatureIdentifier("org.silastandard/core/SiLAService/v1"),
-        FullyQualifiedFeatureIdentifier("de.cetoni/core/SystemStatusProvider/v1"),
+        FullyQualifiedFeatureIdentifier("de.cetoni/core/ErrorProvider/v1"),
         FullyQualifiedFeatureIdentifier("de.cetoni/core/ShutdownController/v1"),
+        FullyQualifiedFeatureIdentifier("de.cetoni/core/SystemStatusProvider/v1"),
     }
 
     def __init__(self, *args, **kwargs):
