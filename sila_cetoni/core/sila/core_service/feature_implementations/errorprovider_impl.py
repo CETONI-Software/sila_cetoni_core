@@ -26,7 +26,7 @@ class SeverityLevel(Enum):
     FATAL = "FATAL"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Error:
     level: SeverityLevel
     description: str
@@ -59,13 +59,20 @@ class ErrorProviderImpl(ErrorProviderBase):
     def __init__(self, parent_server: Server) -> None:
         super().__init__(parent_server=parent_server)
 
+        self.__errors = []
+
         self.run_periodically(
             PropertyUpdater(
                 lambda: self.__errors, not_equal, lambda errors: self.update_Errors([e.to_error_type() for e in errors])
             )
         )
         self.run_periodically(
-            PropertyUpdater(lambda: self.__errors[-1], not_equal, lambda e: self.update_LastError(e.to_error_type()))
+            PropertyUpdater(
+                lambda: self.__errors[-1],
+                not_equal,
+                lambda e: self.update_LastError(e.to_error_type()),
+                when=lambda: len(self.__errors) > 0,
+            )
         )
 
     def ClearAllErrors(self, *, metadata: MetadataDict) -> ClearAllErrors_Responses:
@@ -83,6 +90,7 @@ class ErrorProviderImpl(ErrorProviderBase):
 # test
 if __name__ == "__main__":
     from datetime import timedelta
+    import time
 
     now = datetime.now()
     e1 = Error(SeverityLevel.INFO, "test 1", now)
@@ -97,7 +105,6 @@ if __name__ == "__main__":
     print(e4)
     print(e5)
     print(Error(SeverityLevel.CRITICAL, "test"))
-    import time
     time.sleep(2)
     print(Error(SeverityLevel.FATAL, "test"))
 
