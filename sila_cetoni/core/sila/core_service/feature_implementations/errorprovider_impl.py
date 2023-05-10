@@ -30,7 +30,7 @@ class SeverityLevel(Enum):
 class Error:
     level: SeverityLevel
     description: str
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field(default_factory=lambda: datetime.now().astimezone())
 
     def __level_to_code(self) -> int:
         if self.level == SeverityLevel.INFO:
