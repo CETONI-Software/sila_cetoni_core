@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -58,18 +59,16 @@ class Error:
 
 
 class ErrorProviderImpl(ErrorProviderBase):
-    __errors: List[Error]
+    __errors: deque[Error]
 
     def __init__(self, parent_server: Server) -> None:
         super().__init__(parent_server=parent_server)
 
-        self.__errors = []
+        self.__errors = deque(maxlen=10)
 
         self.run_periodically(
             PropertyUpdater(
-                lambda: self.__errors[:],
-                lambda a, b: len(a) != len(b),
-                lambda errors: self.update_Errors([e.to_error_type() for e in errors]),
+                self.__errors.copy, not_equal, lambda errors: self.update_Errors([e.to_error_type() for e in errors])
             )
         )
 
@@ -95,7 +94,9 @@ class ErrorProviderImpl(ErrorProviderBase):
 # ----------------------------------------------------------------------------
 # test
 if __name__ == "__main__":
+
     import time
+    from copy import deepcopy
     from datetime import timedelta
 
     now = datetime.now()
@@ -104,6 +105,30 @@ if __name__ == "__main__":
     e3 = Error(SeverityLevel.WARNING, "test 1", now)
     e4 = Error(SeverityLevel.INFO, "test 2", now)
     e5 = Error(SeverityLevel.INFO, "test 1", now + timedelta(seconds=1))
+
+    d1 = deque(maxlen=10)
+    d1.append(e1)
+    d1.append(e2)
+    d1.append(e3)
+
+    d2 = d1.copy()
+    d3 = deepcopy(d1)
+
+    print("d1", d1, id(d1), id(d1[0]), id(d1[1]), id(d1[2]))
+    print("d2", d2, id(d2), id(d2[0]), id(d2[1]), id(d2[2]))
+    print("d3", d3, id(d3), id(d3[0]), id(d3[1]), id(d3[2]))
+
+    d1.append(e1)
+
+    print("d1", d1, id(d1), id(d1[0]), id(d1[1]), id(d1[2]))
+    print("d2", d2, id(d2), id(d2[0]), id(d2[1]), id(d2[2]))
+    print("d3", d3, id(d3), id(d3[0]), id(d3[1]), id(d3[2]))
+
+    print(d1 == d2)
+    print(d1 == d3)
+    print(d2 == d3)
+
+    exit()
 
     print(e1)
     print(e2)
