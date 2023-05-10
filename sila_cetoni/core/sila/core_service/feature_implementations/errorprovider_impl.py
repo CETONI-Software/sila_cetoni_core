@@ -67,7 +67,9 @@ class ErrorProviderImpl(ErrorProviderBase):
 
         self.run_periodically(
             PropertyUpdater(
-                lambda: self.__errors, not_equal, lambda errors: self.update_Errors([e.to_error_type() for e in errors])
+                lambda: self.__errors[:],
+                lambda a, b: len(a) != len(b),
+                lambda errors: self.update_Errors([e.to_error_type() for e in errors]),
             )
         )
         self.run_periodically(
