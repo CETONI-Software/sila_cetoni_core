@@ -72,14 +72,13 @@ class ErrorProviderImpl(ErrorProviderBase):
                 lambda errors: self.update_Errors([e.to_error_type() for e in errors]),
             )
         )
-        self.run_periodically(
-            PropertyUpdater(
-                lambda: self.__errors[-1],
-                not_equal,
-                lambda e: self.update_LastError(e.to_error_type()),
-                when=lambda: len(self.__errors) > 0,
-            )
-        )
+
+    def update_Errors(self, errors: List, queue: Queue[List] | None = None) -> None:
+        super().update_Errors(errors, queue)
+        if len(errors) > 0:
+            self.update_LastError(errors[-1])
+        else:
+            self.update_LastError(Error(SeverityLevel.INFO, "No error").to_error_type())
 
     def ClearAllErrors(self, *, metadata: MetadataDict) -> ClearAllErrors_Responses:
         self.__errors.clear()
