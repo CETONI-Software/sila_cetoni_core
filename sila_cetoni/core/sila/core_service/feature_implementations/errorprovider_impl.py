@@ -20,10 +20,10 @@ if TYPE_CHECKING:
 
 
 class SeverityLevel(Enum):
-    INFO = "INFO"
-    WARNING = "WARNING"
-    CRITICAL = "CRITICAL"
-    FATAL = "FATAL"
+    INFO = "Info"
+    WARNING = "Warning"
+    CRITICAL = "Critical"
+    FATAL = "Fatal"
 
 
 @dataclass(frozen=True)
