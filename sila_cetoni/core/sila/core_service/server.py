@@ -23,6 +23,10 @@ class Server(SilaServer):
         server_version: str = "",
         server_vendor_url: str = "",
         server_uuid: Optional[Union[str, UUID]] = None,
+        *,
+        with_system_status_provider: bool = True,
+        with_shutdown_controller: bool = True,
+        with_error_provider: bool = True,
     ):
         from ... import __version__
 
@@ -37,11 +41,14 @@ class Server(SilaServer):
             max_grpc_workers=1000,
         )
 
-        self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
-        self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
+        if with_system_status_provider:
+            self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
+            self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
-        self.shutdowncontroller = ShutdownControllerImpl(self, self.child_task_executor)
-        self.set_feature_implementation(ShutdownControllerFeature, self.shutdowncontroller)
+        if with_shutdown_controller:
+            self.shutdowncontroller = ShutdownControllerImpl(self, self.child_task_executor)
+            self.set_feature_implementation(ShutdownControllerFeature, self.shutdowncontroller)
 
-        self.errorprovider = ErrorProviderImpl(self)
-        self.set_feature_implementation(ErrorProviderFeature, self.errorprovider)
+        if with_error_provider:
+            self.errorprovider = ErrorProviderImpl(self)
+            self.set_feature_implementation(ErrorProviderFeature, self.errorprovider)
