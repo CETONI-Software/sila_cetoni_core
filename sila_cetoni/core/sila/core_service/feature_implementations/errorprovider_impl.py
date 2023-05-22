@@ -90,6 +90,20 @@ class ErrorProviderImpl(ErrorProviderBase):
         logger.debug(f"Received new error {error}")
         self.__errors.append(error)
 
+    @property
+    def errors(self) -> List[Error]:
+        """
+        The current list of errors
+        """
+        return list(self.__errors)
+
+    @property
+    def last_error(self) -> Error:
+        """
+        The error that occurred last
+        """
+        return self.__errors[-1] if len(self.__errors) > 0 else Error(SeverityLevel.INFO, "No error")
+
 
 # ----------------------------------------------------------------------------
 # test
