@@ -90,6 +90,12 @@ class ErrorProviderImpl(ErrorProviderBase):
         logger.debug(f"Received new error {error}")
         self.__errors.append(error)
 
+    def resolve_error(self) -> None:
+        """
+        Adds a "No error" error to the list of errors indicating that the error(s) that occurred before are now resolved
+        """
+        self.add_error(Error(SeverityLevel.INFO, "No error - all previous errors have been resolved"))
+
     @property
     def errors(self) -> List[Error]:
         """
