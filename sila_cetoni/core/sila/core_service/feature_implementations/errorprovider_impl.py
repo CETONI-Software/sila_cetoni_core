@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from queue import Queue
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, ClassVar, List
 
 from sila2.server import MetadataDict
 
@@ -37,6 +37,8 @@ class Error:
     description: str
     timestamp: datetime = field(default_factory=lambda: datetime.now().astimezone())
 
+    NO_ERROR_DESCRIPTION: ClassVar[str] = "No error"
+
     def __level_to_code(self) -> int:
         if self.level == SeverityLevel.INFO:
             return 0
@@ -60,11 +62,13 @@ class Error:
 
 class ErrorProviderImpl(ErrorProviderBase):
     __errors: deque[Error]
+    __last_error: Error
 
     def __init__(self, parent_server: Server) -> None:
         super().__init__(parent_server=parent_server)
 
         self.__errors = deque(maxlen=10)
+        self.__last_error = Error(SeverityLevel.INFO, Error.NO_ERROR_DESCRIPTION)
 
         self.run_periodically(
             PropertyUpdater(
@@ -74,10 +78,11 @@ class ErrorProviderImpl(ErrorProviderBase):
 
     def update_Errors(self, errors: List, queue: Queue[List] | None = None) -> None:
         super().update_Errors(errors, queue)
-        if len(errors) > 0:
-            self.update_LastError(errors[-1])
-        else:
-            self.update_LastError(Error(SeverityLevel.INFO, "No error").to_error_type())
+
+        self.__last_error = (
+            self.__errors[-1] if len(self.__errors) > 0 else Error(SeverityLevel.INFO, Error.NO_ERROR_DESCRIPTION)
+        )
+        self.update_LastError(self.__last_error.to_error_type())
 
     def ClearAllErrors(self, *, metadata: MetadataDict) -> ClearAllErrors_Responses:
         self.__errors.clear()
@@ -108,7 +113,7 @@ class ErrorProviderImpl(ErrorProviderBase):
         """
         The error that occurred last
         """
-        return self.__errors[-1] if len(self.__errors) > 0 else Error(SeverityLevel.INFO, "No error")
+        return self.__last_error
 
 
 # ----------------------------------------------------------------------------

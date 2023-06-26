@@ -38,7 +38,7 @@ class Server(SilaServer):
         if with_system_status_provider:
             from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
             from .generated.systemstatusprovider import SystemStatusProviderFeature
-            
+
             self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
             self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
