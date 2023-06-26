@@ -38,6 +38,7 @@ class Error:
     timestamp: datetime = field(default_factory=lambda: datetime.now().astimezone())
 
     NO_ERROR_DESCRIPTION: ClassVar[str] = "No error"
+    RESOLVED_ERROR_DESCRIPTION: ClassVar[str] = "No error - all previous errors have been resolved"
 
     def __level_to_code(self) -> int:
         if self.level == SeverityLevel.INFO:
@@ -55,6 +56,12 @@ class Error:
             Level=SeverityLevelType(Code=self.__level_to_code(), Name=self.level.value),
             Description=self.description,
         )
+
+    def is_resolved_error(self) -> bool:
+        """
+        Returns whether this error represents a "No error" that indicates that all previous errors have been resolved
+        """
+        return self.level == SeverityLevel.INFO and self.description == self.RESOLVED_ERROR_DESCRIPTION
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self.timestamp!s}, {self.level.value!r}, {self.description!r})"
@@ -99,7 +106,7 @@ class ErrorProviderImpl(ErrorProviderBase):
         """
         Adds a "No error" error to the list of errors indicating that the error(s) that occurred before are now resolved
         """
-        self.add_error(Error(SeverityLevel.INFO, "No error - all previous errors have been resolved"))
+        self.add_error(Error(SeverityLevel.INFO, Error.RESOLVED_ERROR_DESCRIPTION))
 
     @property
     def errors(self) -> List[Error]:
