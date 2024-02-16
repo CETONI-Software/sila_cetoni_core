@@ -18,6 +18,10 @@ Types of changes
 
 ## Unreleased
 
+## v1.9.0
+
+Sync with sila_cetoni v1.9.0 release
+
 ### Changed
 
 - ShutdownController gained the Command PrepareShutdown that is semantically equal to the formerly known Shutdown Command
