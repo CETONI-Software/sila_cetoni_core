@@ -4,7 +4,6 @@ from uuid import UUID
 
 from sila2.server import SilaServer
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -39,7 +38,7 @@ class Server(SilaServer):
             from .feature_implementations.systemstatusprovider_impl import SystemStatusProviderImpl
             from .generated.systemstatusprovider import SystemStatusProviderFeature
 
-            self.systemstatusprovider = SystemStatusProviderImpl(self, self.child_task_executor)
+            self.systemstatusprovider = SystemStatusProviderImpl(self)
             self.set_feature_implementation(SystemStatusProviderFeature, self.systemstatusprovider)
 
         if with_shutdown_controller:
