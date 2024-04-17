@@ -49,6 +49,7 @@ class Error:
             return 2
         if self.level == SeverityLevel.FATAL:
             return 3
+        raise ValueError(f"Unknown severity level {self.level!r}")
 
     def to_error_type(self) -> ErrorType:
         return ErrorType(
@@ -93,6 +94,7 @@ class ErrorProviderImpl(ErrorProviderBase):
 
     def ClearAllErrors(self, *, metadata: MetadataDict) -> ClearAllErrors_Responses:
         self.__errors.clear()
+        return ClearAllErrors_Responses()
 
     # interface for other feature implementations
     def add_error(self, error: Error) -> None:
@@ -126,7 +128,6 @@ class ErrorProviderImpl(ErrorProviderBase):
 # ----------------------------------------------------------------------------
 # test
 if __name__ == "__main__":
-
     import time
     from copy import deepcopy
     from datetime import timedelta

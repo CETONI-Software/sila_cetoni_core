@@ -5,11 +5,10 @@ import time
 from concurrent.futures import Executor
 from threading import Event
 
-from sila2.server import SilaServer
-
 from sila_cetoni.application.system import ApplicationSystem, CetoniApplicationSystem
 
 from ..generated.systemstatusprovider import SystemStatusProviderBase
+from ..server import Server
 
 
 @CetoniApplicationSystem.monitor_traffic
@@ -17,9 +16,9 @@ class SystemStatusProviderImpl(SystemStatusProviderBase):
     __system: ApplicationSystem
     __stop_event: Event
 
-    def __init__(self, server: SilaServer, executor: Executor):
+    def __init__(self, server: Server, executor: Executor):
         super().__init__(server)
-        self.__system = ApplicationSystem()
+        self.__system = ApplicationSystem()  # type: ignore
         self.__stop_event = Event()
 
         def update_state(stop_event: Event):
